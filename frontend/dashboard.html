@@ -1,46 +1,41 @@
-<header style="text-align:center;padding:1rem;background:#000;border-bottom:2px solid #00e5ff;box-shadow:0 0 20px #00e5ff inset;">
-<h1 style="font-size:2.5rem;color:#00e5ff;text-shadow:0 0 15px #00e5ff,0 0 30px #4caf50,0 0 45px #00e5ff;font-family:monospace;animation:glow 2s infinite alternate;">HYDRA CASHIER</h1>
-</header>
-<style>@keyframes glow{from{text-shadow:0 0 10px #00e5ff;}to{text-shadow:0 0 25px #4caf50,0 0 45px #00e5ff;}}</style>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Hydra Wallet Dashboard</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#000; color:#eee; padding:2rem; }
-    header { font-size:2rem; text-align:center; margin-bottom:2rem; text-shadow:0 0 15px #00e5ff,0 0 30px #4caf50; }
-    button { margin:.5rem; padding:.8rem 1.5rem; border:none; border-radius:8px; background:linear-gradient(90deg,#00e5ff,#4caf50); color:#fff; cursor:pointer; font-weight:bold; }
-    button:hover { box-shadow:0 0 10px #00e5ff; }
-    pre { background:#111; padding:1rem; border-radius:6px; color:#0f0; }
-  </style>
-</head>
-<body>
-  <header>
-  <img src="assets/hydra-logo.svg" alt="Hydra Logo" width="160"><br>
-  HYDRA x ApexPay
-</header>
-  <button onclick="refreshWallet()">💰 Refresh Balance</button>
-  <button onclick="makeDeposit()">➕ Deposit 100</button>
-  <button onclick="makeWithdraw()">➖ Withdraw 50</button>
-  <button onclick="makeExchange()">🔄 Exchange 10</button>
-  <h3>Wallet Info</h3>
-  <pre id="walletData">Loading...</pre>
-  <h3>Transactions</h3>
-  <pre id="txData">Loading...</pre>
-  <script src="config.js"></script>
-  <script src="wallet.js"></script>
-  <script>
-    async function refreshWallet(){
-      const w = await getWallet();
-      document.getElementById("walletData").textContent = JSON.stringify(w,null,2);
-      const tx = await getTransactions();
-      document.getElementById("txData").textContent = JSON.stringify(tx,null,2);
-    }
-    async function makeDeposit(){ await deposit(100); refreshWallet(); }
-    async function makeWithdraw(){ await withdraw(50,"test-address"); refreshWallet(); }
-    async function makeExchange(){ await exchange("USD","BTC",10); refreshWallet(); }
-    refreshWallet();
-  </script>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Hydra Wallet</title>
+<style>
+body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
+header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
+button,input{margin:.5rem;padding:.7rem 1rem;border:none;border-radius:6px}
+input{width:200px;background:#111;color:#eee;border:2px solid #0ff}
+button{cursor:pointer;font-weight:bold}
+button:hover{opacity:0.8}
+pre{background:#111;color:#0f0;padding:1rem;border-radius:6px;text-align:left}
+</style></head><body>
+<header>🌀 HYDRA WALLET</header>
+<button onclick="refreshWallet()">💰 Refresh Balance</button><br>
+<input id="depositAmount" type="number" placeholder="Deposit amount"><button onclick="makeDeposit()">➕ Deposit</button><br>
+<input id="withdrawAmount" type="number" placeholder="Withdraw amount"><input id="withdrawAddress" type="text" placeholder="USDT Address"><button onclick="makeWithdraw()">➖ Withdraw</button><br>
+<h2>Balance:</h2><pre id="balance">Loading...</pre>
+<h2>Transactions:</h2><pre id="transactions">Loading...</pre>
+<script src="config.js"></script><script src="wallet.js"></script>
+<script>
+async function refreshWallet(){
+ const w=await getWallet();
+ document.getElementById("balance").textContent=JSON.stringify(w,null,2);
+ const t=await getTransactions();
+ document.getElementById("transactions").textContent=JSON.stringify(t,null,2);
+}
+async function makeDeposit(){
+ const amt=parseFloat(document.getElementById("depositAmount").value);
+ if(!amt) return alert("Enter amount");
+ const r=await deposit(amt);
+ alert(JSON.stringify(r));
+ refreshWallet();
+}
+async function makeWithdraw(){
+ const amt=parseFloat(document.getElementById("withdrawAmount").value);
+ const addr=document.getElementById("withdrawAddress").value;
+ if(!amt||!addr) return alert("Enter amount + address");
+ const r=await withdraw(amt,addr);
+ alert(JSON.stringify(r));
+ refreshWallet();
+}
+refreshWallet();
+</script></body></html>
