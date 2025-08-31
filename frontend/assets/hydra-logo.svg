@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="hydraGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#4caf50"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="95" stroke="url(#hydraGradient)" stroke-width="6" fill="none" filter="url(#glow)"/>
+  <text x="50%" y="50%" text-anchor="middle" dy=".35em" font-family="Arial Black" font-size="36" fill="url(#hydraGradient)" filter="url(#glow)">
+    HYDRA
+  </text>
+</svg>
