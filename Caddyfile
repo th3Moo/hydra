@@ -1,0 +1,1 @@
+hydra-casino-wbbh7.sevalla.app {\n    reverse_proxy backend:5000\n}
