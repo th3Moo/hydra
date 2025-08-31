@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hydra Wallet Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #111; color: #eee; }
+    button { margin: 0.5rem; padding: 0.5rem 1rem; border: none; border-radius: 6px; background: #4caf50; color: white; cursor: pointer; }
+    button:hover { background: #45a049; }
+    pre { background: #222; padding: 1rem; border-radius: 6px; color: #0f0; }
+  </style>
+</head>
+<body>
+  <h1>Hydra Wallet Dashboard</h1>
+
+  <button onclick="loadWallets()">💰 Check Balance</button>
+  <button onclick="deposit(100)">➕ Deposit 100</button>
+  <button onclick="withdraw(50)">➖ Withdraw 50</button>
+  <button onclick="exchange('USD','BTC',25)">🔄 Exchange 25 USD → BTC</button>
+
+  <h2>Wallets</h2>
+  <pre id="wallets">No data yet...</pre>
+
+  <script src="config.js"></script>
+  <script src="wallet.js"></script>
+  <script>
+    async function loadWallets() {
+      try {
+        const wallets = await getWallets();
+        document.getElementById("wallets").innerText = JSON.stringify(wallets, null, 2);
+      } catch (err) {
+        console.error("Error loading wallets:", err);
+        alert("Failed to fetch wallets. Are you logged in?");
+      }
+    }
+  </script>
+</body>
+</html>
