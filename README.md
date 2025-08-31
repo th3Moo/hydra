@@ -1,49 +1,54 @@
-# Hydra Casino
+# Hydra Project (No MongoDB)
 
-Modern online gaming platform with a Node/Express + SQLite backend and React frontend.
+This version does **not** use MongoDB.  
+All data is stored **in-memory** (resets on restart).
 
-## Monorepo Layout
+## 🚀 Frontend
+- `frontend/index.html`
+- `frontend/register.html`
+- Auto-deployed to GitHub Pages via `.github/workflows/pipeline.yml`
+
+## ⚙️ Backend
+- Folder: `backend_nomongo/`
+- Server: Node.js + Express
+- No database required
+
+### Setup Backend
+1. SSH into your Sevalla server
+2. Install dependencies:
+   ```bash
+   cd backend_nomongo
+   npm install
+   ```
+3. Start server:
+   ```bash
+   node server.js
+   ```
+
+Backend runs on:
 ```
-hydra-casino/
-├─ backend/        # Express API + SQLite
-└─ frontend/       # React app
+http://your-sevalla-domain:5000
 ```
 
-## Quick Start
-
-### 1) Clone
+Or with Docker:
 ```bash
-git clone https://github.com/<you>/hydra-casino.git
-cd hydra-casino
+docker-compose up -d
 ```
 
-### 2) Backend
-```bash
-cd backend
-cp .env.example .env
-npm install
-npm run dev   # or: npm start
+## 🔗 Connecting
+Update `API_BASE` in frontend files:
+```js
+const API_BASE = "https://your-sevalla-domain.com:5000";
 ```
 
-### 3) Frontend
-```bash
-cd ../frontend
-npm install
-npm start
-```
+Routes supported:
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/wallets`
+- `POST /api/tx/deposit`
+- `POST /api/tx/withdraw`
+- `POST /api/tx/exchange`
+- `GET /api/settings`
 
-### Environment
-Copy `.env.example` to `.env` in `backend/` and set a strong `JWT_SECRET`.
-
-### Deployment (Sevalla)
-- Run backend with PM2 (port 3001 by default)
-- Serve frontend build via Nginx (proxy /api → backend)
-- Use the provided GitHub Actions to build and (optionally) deploy over SSH
-
-## GitHub Actions
-- **CI**: Builds backend and frontend on every push/PR
-- **Deploy (optional)**: If you add repository secrets `SSH_HOST`, `SSH_USER`, `SSH_KEY`, `SSH_PORT` (optional), it will SSH into your Sevalla box and run a deploy script (`deploy.sh` snippet in the workflow).
-
-## Notes
-- Webhooks verification for CashApp/TRON are placeholders; wire in real signature/chain verification for production.
-- SQLite is bundled for simplicity; you can later migrate to Postgres using `DATABASE_URL` if needed.
+---
+⚡ Data resets when backend restarts (since no DB). For persistence, you can later add MongoDB.
