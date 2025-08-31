@@ -1,8 +1,12 @@
-function getAuthHeaders(){return{"Content-Type":"application/json","Authorization":"Bearer "+localStorage.getItem("token")};}
-async function register(u,p){const r=await fetch(`${API_BASE}/api/auth/register`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u,password:p})});return r.json();}
-async function login(u,p){const r=await fetch(`${API_BASE}/api/auth/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u,password:p})});const d=await r.json();if(r.ok){localStorage.setItem("token",d.token);}return d;}
-async function getWallet(){const r=await fetch(`${API_BASE}/api/wallets`,{headers:getAuthHeaders()});return r.json();}
-async function getTransactions(){const r=await fetch(`${API_BASE}/api/transactions`,{headers:getAuthHeaders()});return r.json();}
-async function deposit(amount){const r=await fetch(`${API_BASE}/api/tx/deposit`,{method:"POST",headers:getAuthHeaders(),body:JSON.stringify({amount})});return r.json();}
-async function withdraw(amount,address){const r=await fetch(`${API_BASE}/api/tx/withdraw`,{method:"POST",headers:getAuthHeaders(),body:JSON.stringify({amount,address})});return r.json();}
-async function exchange(from,to,amount){const r=await fetch(`${API_BASE}/api/tx/exchange`,{method:"POST",headers:getAuthHeaders(),body:JSON.stringify({from,to,amount})});return r.json();}
+function getAuthHeaders(){return{"Content-Type":"application/json","Authorization":"Bearer "+(localStorage.getItem("token")||"")};}
+async function apiPost(path, body){const r=await fetch(API_BASE+path,{method:"POST",headers:getAuthHeaders(),body:JSON.stringify(body||{})});return r.json();}
+async function apiGet(path){const r=await fetch(API_BASE+path,{headers:getAuthHeaders()});return r.json();}
+async function register(username,password){return apiPost("/api/auth/register",{username,password});}
+async function login(username,password){const d=await apiPost("/api/auth/login",{username,password});if(d.token)localStorage.setItem("token",d.token);return d;}
+async function getWallet(){return apiGet("/api/wallets");}
+async function getTransactions(){return apiGet("/api/transactions");}
+async function deposit(amount){return apiPost("/api/tx/deposit",{amount});}
+async function withdraw(amount,address){return apiPost("/api/tx/withdraw",{amount,address});}
+async function exchange(from,to,amount){return apiPost("/api/tx/exchange",{from,to,amount});}
+async function createCashAppIntent(amount){return apiPost("/api/deposit/cashapp",{amount});}
+async function getIntentStatus(id){return apiGet("/api/deposit/"+id+"/status");}
