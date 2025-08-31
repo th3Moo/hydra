@@ -1,169 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hydra Casino Gateway</title>
+  <meta charset="UTF-8">
+  <title>Hydra Login</title>
   <style>
-    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 20px; margin: 0; min-height: 100vh; }
-    .hidden { display: none; }
-    .section { margin: 20px 0; padding: 20px; border: 1px solid #334155; border-radius: 8px; background: rgba(30, 41, 59, 0.7); max-width: 500px; }
-    h1, h2 { color: #34D399; margin-top: 0; }
-    input, select, button { padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #475569; background: #1e293b; color: #e2e8f0; width: 100%; }
-    button { background: #34D399; color: #0f172a; border: none; cursor: pointer; font-weight: bold; transition: background 0.3s; }
-    button:hover { background: #10B981; }
-    .container { display: flex; flex-direction: column; align-items: center; }
-    .logo { font-size: 2.5rem; margin-bottom: 10px; }
+    body { font-family: Arial, sans-serif; background:#000; color:#eee; text-align:center; padding:2rem; }
+    header { font-size:2rem; text-shadow:0 0 12px #00e5ff, 0 0 24px #4caf50; margin-bottom:2rem; }
+    input,button { padding:.8rem; margin:.5rem; border-radius:8px; border:none; }
+    input { width:200px; background:#111; color:#eee; border:2px solid #333; }
+    input:focus { border-color:#00e5ff; outline:none; }
+    button { background:linear-gradient(90deg,#00e5ff,#4caf50); color:#fff; cursor:pointer; font-weight:bold; }
+    button:hover { box-shadow:0 0 10px #00e5ff; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">🌀</div>
-    <h1>Hydra Casino Gateway</h1>
-
-    <!-- Login Section -->
-    <div id="login-section" class="section">
-      <h2>Login</h2>
-      <input id="email" placeholder="Email" type="text" /><br />
-      <input id="password" placeholder="Password" type="password" /><br />
-      <button onclick="login()">Login</button>
-      <p>Don't have an account? <a href="register.html">Register here</a></p>
-    </div>
-
-    <!-- Wallet Section -->
-    <div id="wallet-section" class="section hidden">
-      <h2>Your Wallet</h2>
-      <select id="currency-select"></select><br />
-      <p id="balance">Balance: $0</p>
-      <button onclick="loadWallet()">Check Balance</button>
-      <button onclick="withdraw()">Withdraw</button>
-    </div>
-
-    <!-- Deposit Section -->
-    <div id="deposit-section" class="section hidden">
-      <h2>Deposit</h2>
-      <input id="deposit-amount" placeholder="Amount" type="number" /><br />
-      <button onclick="deposit()">Deposit</button>
-    </div>
-
-    <!-- Withdrawal Section -->
-    <div id="withdraw-section" class="section hidden">
-      <h2>Withdraw</h2>
-      <input id="withdraw-amount" placeholder="Amount" type="number" /><br />
-      <button onclick="withdraw()">Withdraw</button>
-    </div>
-
-    <!-- Exchange Section -->
-    <div id="exchange-section" class="section hidden">
-      <h2>Exchange</h2>
-      <select id="from-currency"></select> →
-      <select id="to-currency"></select><br />
-      <input id="exchange-amount" placeholder="Amount" type="number" /><br />
-      <button onclick="exchange()">Exchange</button>
-    </div>
-  </div>
-
+  <header>🐉 HYDRA x ApexPay</header>
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input id="username" type="text" placeholder="Username" required><br>
+    <input id="password" type="password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
+  <p>Don’t have an account? <a href="register.html" style="color:#00e5ff;">Register</a></p>
   <script src="config.js"></script>
-<script src="config.js"></script>
-<script src="config.js"></script>
-<script src="config.js"></script>
-<script src="config.js"></script>
-<script src="login.js"></script>
-<script src="config.js"></script>
-<script src="login.js"></script>
-<script>
-    const API_BASE = "https://your-sevalla-domain.com:5000";
-    let token = null;
-    let settings = null;
-
-    async function loadSettings() {
-      try {
-        const res = await fetch(`${API_BASE}/api/settings`);
-        settings = await res.json();
-        const currencySelect = document.querySelector("#currency-select");
-        currencySelect.innerHTML = '';
-        settings.supportedCurrencies.forEach(cur => {
-          const option = document.createElement("option");
-          option.value = cur;
-          option.textContent = cur;
-          currencySelect.appendChild(option);
-        });
-        const fromCurrency = document.querySelector("#from-currency");
-        const toCurrency = document.querySelector("#to-currency");
-        fromCurrency.innerHTML = '';
-        toCurrency.innerHTML = '';
-        settings.supportedCurrencies.forEach(cur => {
-          fromCurrency.innerHTML += `<option value="${cur}">${cur}</option>`;
-          toCurrency.innerHTML += `<option value="${cur}">${cur}</option>`;
-        });
-        if (settings.depositEnabled) document.querySelector("#deposit-section").classList.remove("hidden");
-        if (settings.withdrawEnabled) document.querySelector("#withdraw-section").classList.remove("hidden");
-        if (settings.exchangeEnabled) document.querySelector("#exchange-section").classList.remove("hidden");
-      } catch (err) { console.error("Failed to load settings:", err); }
-    }
-
-    async function login() {
-      const email = document.querySelector("#email").value;
-      const password = document.querySelector("#password").value;
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (data.token) {
-        token = data.token;
-        document.querySelector("#login-section").classList.add("hidden");
-        document.querySelector("#wallet-section").classList.remove("hidden");
-        loadWallet();
-      } else { alert("Login failed: " + (data.message || "Unknown error")); }
-    }
-
-    async function loadWallet() {
-      const res = await fetch(`${API_BASE}/api/wallets`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      const wallets = await res.json();
-      const selectedCurrency = document.querySelector("#currency-select").value;
-      const wallet = wallets.find(w => w.currency === selectedCurrency);
-      document.querySelector("#balance").textContent = `Balance: ${wallet ? wallet.balance : 0}`;
-    }
-
-    async function deposit() {
-      const amount = document.querySelector("#deposit-amount").value;
-      const currency = document.querySelector("#currency-select").value;
-      await fetch(`${API_BASE}/api/tx/deposit`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency })
-      });
-      loadWallet();
-    }
-
-    async function withdraw() {
-      const amount = document.querySelector("#withdraw-amount").value;
-      const currency = document.querySelector("#currency-select").value;
-      await fetch(`${API_BASE}/api/tx/withdraw`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, currency })
-      });
-      loadWallet();
-    }
-
-    async function exchange() {
-      const from = document.querySelector("#from-currency").value;
-      const to = document.querySelector("#to-currency").value;
-      const amount = document.querySelector("#exchange-amount").value;
-      await fetch(`${API_BASE}/api/tx/exchange`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ from, to, amount })
-      });
-      loadWallet();
-    }
-
-    document.addEventListener("DOMContentLoaded", loadSettings);
+  <script src="wallet.js"></script>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      const r = await login(u,p);
+      if(r.token){
+        alert("✅ Logged in!");
+        window.location.href="dashboard.html";
+      } else {
+        alert("❌ " + (r.error || "Login failed"));
+      }
+    });
   </script>
 </body>
 </html>
