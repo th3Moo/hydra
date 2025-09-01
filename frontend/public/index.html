@@ -1,5 +1,181 @@
 
-<!DOCTYPE html><html><head><meta charset="UTF-8"> <meta name="description" content="Hydra Casino - Modern Online Gaming Platform" /><title>Hydra Login</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"> <meta name="description" content="Hydra Casino - Modern Online Gaming Platform" /><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hydra Wallet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #eee;
+      font-family: "Orbitron", Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    canvas#matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    header {
+      font-size: 2.5rem;
+      color: #0ff;
+      text-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
+      margin: 1.5rem 0;
+      letter-spacing: 2px;
+    }
+    button, input, select {
+      margin: .7rem;
+      padding: .8rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #111;
+      color: #0ff;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 10px #0ff, inset 0 0 5px #0ff;
+      transition: .2s;
+    }
+    button:hover, input:focus, select:focus {
+      box-shadow: 0 0 20px #0ff, inset 0 0 10px #0ff;
+      transform: scale(1.05);
+    }
+    pre {
+      background: #111;
+      color: #0f0;
+      padding: 1.2rem;
+      border-radius: 10px;
+      text-align: left;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 15px #0ff;
+      overflow-x: auto;
+    }
+    #p2p-form {
+      background: rgba(0,20,40,.8);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 20px #0ff;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <header>🌀 HYDRA WALLET</header>
+
+  <button onclick="refreshWallet()">💰 Refresh Balance</button><br>
+  <input id="depositAmount" type="number" placeholder="Deposit amount">
+  <button onclick="makeDeposit()">➕ Deposit</button><br>
+  <input id="withdrawAmount" type="number" placeholder="Withdraw amount">
+  <input id="withdrawAddress" type="text" placeholder="USDT Address">
+  <button onclick="makeWithdraw()">➖ Withdraw</button><br>
+
+  <h2>Balance:</h2>
+  <pre id="balance">Loading...</pre>
+
+  <h2>Transactions:</h2>
+  <pre id="transactions">Loading...</pre>
+
+  <h2>Deposit via Binance P2P (CashApp)</h2>
+  <div id="p2p-form">
+    <input type="number" id="p2pAmount" placeholder="Deposit amount (USD)">
+    <br>
+    <input type="text" id="hydraUser" placeholder="Your Hydra Username">
+    <br><br>
+    <select id="asset">
+      <option value="USDT">USDT (TRC20)</option>
+      <option value="BTC">Bitcoin (BTC)</option>
+    </select>
+    <br><br>
+    <button onclick="showDepositInstructions()">💱 Get Deposit Address</button>
+    <div id="depositInstructions" style="margin-top:1rem;color:#0f0;"></div>
+    <div id="qrcode" style="margin-top:1rem;"></div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="wallet.js"></script>
+  <script>
+    async function refreshWallet(){
+      const w = await getWallet();
+      document.getElementById("balance").textContent = JSON.stringify(w, null, 2);
+      const t = await getTransactions();
+      document.getElementById("transactions").textContent = JSON.stringify(t, null, 2);
+    }
+
+    async function makeDeposit(){
+      const amt = parseFloat(document.getElementById("depositAmount").value);
+      if(!amt) return alert("Enter amount");
+      const r = await deposit(amt);
+      alert(JSON.stringify(r));
+      refreshWallet();
+    }
+
+    async function makeWithdraw(){
+      const amt = parseFloat(document.getElementById("withdrawAmount").value);
+      const addr = document.getElementById("withdrawAddress").value;
+      if(!amt || !addr) return alert("Enter amount + address");
+      const r = await withdraw(amt, addr);
+      alert(JSON.stringify(r));
+      refreshWallet();
+    }
+
+    function showDepositInstructions(){
+      const amt = parseFloat(document.getElementById("p2pAmount").value);
+      const hydraUser = document.getElementById("hydraUser").value.trim();
+      const asset = document.getElementById("asset").value;
+
+      if(!amt || !hydraUser){
+        alert("Enter deposit amount + Hydra username ❗");
+        return;
+      }
+
+      const wallets = {
+        "USDT": "TUxxxxxxYourTRC20Wallet",
+        "BTC": "bc1qxxxxxxYourBTCWallet"
+      };
+
+      document.getElementById("depositInstructions").innerHTML = `
+        ✅ Send <b>$${amt}</b> worth of <b>${asset}</b> via Binance P2P (CashApp).<br><br>
+        👉 Hydra ID: <span style="color:#0ff">${hydraUser}</span><br>
+        👉 Wallet: <span style="color:#0ff">${wallets[asset]}</span><br><br>
+        ⏳ After funds arrive, your Hydra account will be credited.
+      `;
+
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), wallets[asset]);
+    }
+
+    refreshWallet();
+
+    // Matrix effect
+    const c = document.getElementById("matrix"), ctx = c.getContext("2d");
+    c.height = window.innerHeight; c.width = window.innerWidth;
+    const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヰヱヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+    const font = 14, cols = c.width / font, drops = Array(cols).fill(1);
+    function draw(){
+      ctx.fillStyle = "rgba(0,0,0,.05)";
+      ctx.fillRect(0,0,c.width,c.height);
+      ctx.fillStyle = "#0f0"; ctx.font = font+"px monospace";
+      for(let i=0;i<drops.length;i++){
+        const text = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text,i*font,drops[i]*font);
+        if(drops[i]*font>c.height&&Math.random()>0.975)drops[i]=0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw,33);
+  </script>
+</body>
+</html><title>Hydra Login</title>
 <style>
 body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
 header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
