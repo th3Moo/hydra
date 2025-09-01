@@ -1,0 +1,41 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Hydra Wallet</title>
+<style>
+body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
+header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
+button,input{margin:.5rem;padding:.7rem 1rem;border:none;border-radius:6px}
+input{width:200px;background:#111;color:#eee;border:2px solid #0ff}
+button{cursor:pointer;font-weight:bold}
+button:hover{opacity:0.8}
+pre{background:#111;color:#0f0;padding:1rem;border-radius:6px;text-align:left}
+</style></head><body>
+<header>🌀 HYDRA WALLET</header>
+<button onclick="refreshWallet()">💰 Refresh Balance</button><br>
+<input id="depositAmount" type="number" placeholder="Deposit amount"><button onclick="makeDeposit()">➕ Deposit</button><br>
+<input id="withdrawAmount" type="number" placeholder="Withdraw amount"><input id="withdrawAddress" type="text" placeholder="USDT Address"><button onclick="makeWithdraw()">➖ Withdraw</button><br>
+<h2>Balance:</h2><pre id="balance">Loading...</pre>
+<h2>Transactions:</h2><pre id="transactions">Loading...</pre>
+<script src="config.js"></script><script src="wallet.js"></script>
+<script>
+async function refreshWallet(){
+ const w=await getWallet();
+ document.getElementById("balance").textContent=JSON.stringify(w,null,2);
+ const t=await getTransactions();
+ document.getElementById("transactions").textContent=JSON.stringify(t,null,2);
+}
+async function makeDeposit(){
+ const amt=parseFloat(document.getElementById("depositAmount").value);
+ if(!amt) return alert("Enter amount");
+ const r=await deposit(amt);
+ alert(JSON.stringify(r));
+ refreshWallet();
+}
+async function makeWithdraw(){
+ const amt=parseFloat(document.getElementById("withdrawAmount").value);
+ const addr=document.getElementById("withdrawAddress").value;
+ if(!amt||!addr) return alert("Enter amount + address");
+ const r=await withdraw(amt,addr);
+ alert(JSON.stringify(r));
+ refreshWallet();
+}
+refreshWallet();
+</script></body></html>
