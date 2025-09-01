@@ -1,4 +1,7 @@
-hydra-casino-wbbh7.sevalla.app {\n    reverse_proxy backend:5000\n}
+hydra-casino-wbbh7.sevalla.app {
+    reverse_proxy hydra-backend:5000
+}
+
 :80 {
     reverse_proxy hydra-backend:5000
 }
