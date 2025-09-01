@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hydra Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#000;color:#eee;font-family:"Orbitron",Arial,sans-serif;text-align:center;overflow:hidden}
+    canvas#matrix{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+    header{font-size:2.5rem;color:#0ff;text-shadow:0 0 15px #0ff,0 0 30px #0ff;margin:2rem 0;letter-spacing:2px}
+    input,button{padding:.8rem;margin:.7rem;border-radius:8px;border:none;font-size:1rem;background:#111;color:#0ff;border:2px solid #0ff;box-shadow:0 0 10px #0ff,inset 0 0 5px #0ff;transition:.2s}
+    button:hover,input:focus{box-shadow:0 0 20px #0ff,inset 0 0 10px #0ff;transform:scale(1.05)}
+    a{color:#0ff;text-shadow:0 0 10px #0ff}
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <header>🌀 HYDRA LOGIN</header>
+  <form id="loginForm">
+    <input id="username" type="text" placeholder="Username" required><br>
+    <input id="password" type="password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
+  <a href="register.html">Need an account? Register</a>
+  <script src="config.js"></script><script src="wallet.js"></script>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit",async e=>{
+      e.preventDefault();const u=document.getElementById("username").value;const p=document.getElementById("password").value;const r=await login(u,p);
+      if(r.token){alert("✅ Logged in!");window.location.href="dashboard.html";}else{alert("❌ "+(r.error||"Login failed"));}});
+    const c=document.getElementById("matrix"),ctx=c.getContext("2d");c.height=window.innerHeight;c.width=window.innerWidth;
+    const letters="アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヰヱヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
+    const font=14,cols=c.width/font,drops=Array(cols).fill(1);function draw(){ctx.fillStyle="rgba(0,0,0,.05)";ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle="#0f0";ctx.font=font+"px monospace";for(let i=0;i<drops.length;i++){const text=letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text,i*font,drops[i]*font);if(drops[i]*font>c.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}}setInterval(draw,33);
+  </script>
+</body>
+</html>
