@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#1a1a2e" />
-  <meta name="description" content="Hydra Casino - Modern Online Gaming Platform" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <title>Hydra Casino</title>
-</head>
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-</body>
-</html>
+
+<!DOCTYPE html><html><head><meta charset="UTF-8"> <meta name="description" content="Hydra Casino - Modern Online Gaming Platform" /><title>Hydra Login</title>
+<style>
+body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
+header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
+input,button{padding:.8rem;margin:.5rem;border-radius:6px;border:none}
+input{background:#111;color:#eee;border:2px solid #0ff}
+button{background:#0ff;color:#000;font-weight:bold;cursor:pointer}
+button:hover{background:#4caf50;color:#fff}
+</style></head><body>
+<header>🌀 HYDRA LOGIN</header>
+<form id="loginForm"><input id="username" type="text" placeholder="Username" required>
+<input id="password" type="password" placeholder="Password" required>
+<button type="submit">Login</button></form>
+<a href="register.html">Need an account? Register</a>
+<script src="config.js"></script><script src="wallet.js"></script>
+<script>
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const u=document.getElementById("username").value;
+ const p=document.getElementById("password").value;
+ const r=await login(u,p);
+ if(r.token){alert("✅ Logged in!");window.location.href="dashboard.html";}
+ else{alert("❌ "+(r.error||"Login failed"));}
+});
+</script></body></html>
+<div style="position:fixed;bottom:16px;left:16px"><a href="cashapp.html" style="color:#00e5ff">Deposit via Cash App (P2P)</a></div>
