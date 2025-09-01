@@ -7,6 +7,7 @@ services:
     restart: always
     environment:
       - PORT=5000
+      - DATABASE_URL=postgres://admin:aX6-iA1=yW4=vO2=cM0_@europe-west1-001.proxy.kinsta.app:30969/hydra?sslmode=disable
     expose:
       - "5000"
 
@@ -27,3 +28,4 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+
