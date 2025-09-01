@@ -289,6 +289,15 @@
             color: var(--accent);
             font-weight: 600;
         }
+        
+        .verification {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--success);
+        }
     </style>
 </head>
 <body>
@@ -409,8 +418,14 @@
                 <div class="wallet-section">
                     <h3>BTC Wallet Address</h3>
                     <div class="wallet-address" id="btc-address">
-                        bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
+                        18YGvdEcGPNHyib54CpixtVz2Yv98frSwz
                         <button class="copy-btn" onclick="copyAddress('btc-address')">Copy</button>
+                    </div>
+                    <div class="verification">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#28A745"/>
+                        </svg>
+                        <span>Verified Bitcoin address</span>
                     </div>
                     <p>Send only <span class="highlight">Bitcoin (BTC)</span> to this address</p>
                 </div>
@@ -418,8 +433,14 @@
                 <div class="wallet-section">
                     <h3>USDT (TRC20) Wallet Address</h3>
                     <div class="wallet-address" id="usdt-address">
-                        TYHgjdf8JhLHn8J8kj7h87Jh8JH8JH8J
+                        TJM2oQN8LHef3FYK4GP53xM9ZE9EVq5vk4
                         <button class="copy-btn" onclick="copyAddress('usdt-address')">Copy</button>
+                    </div>
+                    <div class="verification">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#28A745"/>
+                        </svg>
+                        <span>Verified TRC20 address</span>
                     </div>
                     <p>Send only <span class="highlight">USDT (TRC20)</span> to this address</p>
                 </div>
@@ -484,13 +505,14 @@
         
         function copyAddress(elementId) {
             const addressElement = document.getElementById(elementId);
-            const address = addressElement.textContent.trim();
+            const address = addressElement.childNodes[0].textContent.trim();
             
             navigator.clipboard.writeText(address).then(function() {
                 const btn = addressElement.querySelector('.copy-btn');
+                const originalText = btn.textContent;
                 btn.textContent = 'Copied!';
                 setTimeout(function() {
-                    btn.textContent = 'Copy';
+                    btn.textContent = originalText;
                 }, 2000);
             });
         }
