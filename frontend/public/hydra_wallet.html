@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Hydra Wallet</title>
+<style>
+body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
+header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
+pre{background:#111;color:#0f0;padding:1rem;border-radius:6px;text-align:left}
+.cashapp{margin-top:2rem;padding:1rem;background:#111;border-radius:10px;display:inline-block}
+.cashapp img{width:200px;height:200px;display:block;margin:0 auto 1rem;cursor:pointer}
+button{cursor:pointer;font-weight:bold;background:#0ff;color:#000;padding:.7rem 1rem;border:none;border-radius:6px}
+button:hover{opacity:0.8}
+</style>
+</head>
+<body>
+<header>🌀 HYDRA WALLET</header>
+
+<h2>Balance:</h2>
+<pre id="balance">Loading...</pre>
+
+<h2>Transactions:</h2>
+<pre id="transactions">Loading...</pre>
+
+<!-- Cash App Payment Section -->
+<div class="cashapp">
+  <h2>💵 Fund with Cash App</h2>
+  <a id="cashapplink" href="https://cash.app/$V3tpi3l">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKAQAAAABTUiuoAAACAElEQVR4nO2bQYrjQAxFn8aGLMvgA8xRyjfrM80N7KPMDVzLgM2fhcpJOgxMJk0cN0ibUOW3+CDkkn45Jh6M6cejJAQaaKCBBhroK1Gr0cLUAZO12FC27eHlAgJ9KFr/ySNA6THS2pLnHqBZALBXCgj0CbRcSqicpDF5nvB620NAoF9AV3uzgED/Eu3dWpQeKL2g7CEg0CeylYSnZxoaDBrfvp2d36410IpOZmbWgX3MQJ7BBlZvCfcQEOgj4bX1yX5aTbCgu+33aw20zlsDAKUF0oJZt27jV9TWgdBaW5M1i5EWNBmQxxXdN4Zv1xookiRIi59W5LnxeUuaoT6QpPHtWgPdsgX4TJwl1ZTRSGOSIltHQT1bkmoxbSnbllJk6zion1uWf/WCtLRAIygdVpdrq1cKCPQJNC3YUE6ygbU6hvl3i89gww4CAv0fdDVICxpLi0YaMf1c0FhOukdfIyDQf8fmPJVeRukgzx0GGJQWy3NPvAmPgl66jBpA4z1h7Q4vT6LLOAp6vTvWmM7mF8hubRDn1uFQL6EZ/DZSOvsxxo2hcRStgd7cHafzJ4uwnKRxBwGBPoPmGaqN4V7GOb6iOQx6f3eMdxkCywKmoVF8RXM0NKm+8CYzs8EbjNXsQ8s+AgJ9JK6uLm46Xe33cHWPhlr8ayHQQAMNNNBvhP4B63wKwqTtVXMAAAAASUVORK5CYII=" alt="Cash App QR">
+  </a>
+  <br>
+  <button onclick="payNow()">Pay $V3tpi3l on Cash App</button>
+</div>
+
+<script>
+async function refreshWallet(){
+  document.getElementById("balance").textContent = "Demo Balance: $0";
+  document.getElementById("transactions").textContent = "No transactions yet.";
+}
+function payNow(){
+  // Try deep link first
+  window.location.href = "cashapp://$V3tpi3l";
+  // Fallback after 1.5s if app not installed
+  setTimeout(()=>{window.location.href="https://cash.app/$V3tpi3l";},1500);
+}
+refreshWallet();
+</script>
+</body>
+</html>
