@@ -1,82 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Hydra • Cash App Bridge</title>
+<title>Cash App Payment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  body{background:#000;color:#eee;font-family:Inter,Arial,Helvetica,sans-serif;margin:0;padding:24px}
-  header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-  .logo{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle,#00e5ff,#006eff);box-shadow:0 0 24px #00e5ff33}
-  h1{margin:0;font-size:22px;letter-spacing:.5px}
-  .card{background:#0b0b0b;border:1px solid #1b1b1b;border-radius:12px;padding:18px;max-width:560px}
-  .row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-  .chip{flex:0 0 auto;padding:10px 14px;border-radius:10px;background:#101010;border:1px solid #1f1f1f;cursor:pointer}
-  .chip:hover{border-color:#00e5ff}
-  .chip.active{border-color:#00e5ff;box-shadow:0 0 0 3px #00e5ff22}
-  input[type="number"]{width:160px;padding:10px;border-radius:10px;border:1px solid #1f1f1f;background:#0f0f0f;color:#eee}
-  button{padding:12px 18px;border:none;border-radius:10px;background:linear-gradient(90deg,#00e5ff,#4caf50);color:#000;font-weight:700;cursor:pointer}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  a{color:#00e5ff}
-  .muted{color:#aaa;font-size:13px}
-  .ok{color:#59ffa6}
-  .warn{color:#ffcf59}
+  body {background:#000;color:#eee;font-family:Inter,Arial,Helvetica,sans-serif;margin:0;padding:24px;text-align:center}
+  .card {background:#0b0b0b;border:1px solid #1b1b1b;border-radius:12px;padding:20px;display:inline-block}
+  img {margin:20px auto;max-width:240px;border-radius:12px;box-shadow:0 0 20px #00e5ff44}
+  a {display:inline-block;margin-top:12px;padding:12px 20px;background:linear-gradient(90deg,#00e5ff,#4caf50);color:#000;text-decoration:none;font-weight:bold;border-radius:10px}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo"></div>
-  <h1>Hydra Cash App Bridge (via Binance P2P)</h1>
-</header>
-
-<div class="card">
-  <div class="muted">Choose or enter a USD amount. We’ll open Binance P2P (USDT / USD / Cash App) with that amount prefilled.</div>
-  <div class="row" id="chips"></div>
-  <div class="row">
-    <input id="custom" type="number" min="5" step="1" placeholder="Custom amount (USD)" />
-    <button id="startBtn">Create Deposit Intent</button>
+  <h1>Pay with Cash App</h1>
+  <div class="card">
+    <p>Scan this QR code to pay <b>$V3tpi3l</b></p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaAQAAAAAefbjOAAADB0lEQVR4nO2cy23cMBCG/wkJ7JECXIBLoTpITS4pHYiluIAA4tEAhT8HvqRsDnE2kLzS8LK7MD9gBhzMi0ML8ekVvn2eARRSSCGFFFJIoXNCUpYFEC0QxEJkWERGLCJjrBvGQ8RTaH/IkyRnQEYAMroPgX+3AGAIwJAkuYX2E0+h/SBbPuMA+B8AERchogXDYBKCmEREQACTdhdPoeOh8JqAMAAyYhF4pjvm6XRS6CEo3tjtQMZo73Y8n04K/f2q5+0IIALi50GI+MIcScLrh5RwcoR4Ch0FBRERGQAAhjICkBGG8O83AlhyqXGUeArt7SNWDiAMEACLAO5DclqRPcgR4il0JCQiIpzqT07RglMU4RSlWslx4im0D4TaZzDk5LI/IKfahcg5pmcCp7qZ0xfXSaFHoGIRfgbgZ8PaqzIEXG1J+RkAXFKLuABUDpkzALhUTt+T5OTIbgfVW6hFXAfiFG8lVgQRAaJINpUgInwT+wdoP/EU2geqPoIJxSnkVaJGzh4mV9yIRo3zQ/WQYUr24FnDBFwxlZxRtD+oRZwaqoe8OfNeYdQ8on9Tizg5tDaBHis4o1UYLe+ERo0rQC1CNC8wAyt/wNaPoNYaV4NqrQH0xiWCWCDIjQjDseIptA/UKkpDwP0UwiXb7rcs85xMHAR+BmVv8RTaHVpXn5xLwdHLzVpw9NJDo8bJoVWl2ZOJcpHh1j0K7UdcBGo+ovagJte8RUs5PTdLLeLMULvXaM2pGdkE+mhdLzi01jg/tIkaAPJFeD746h7KTs0jLgFtogZJ+LlMSvTMspuFWsT5oVx91uGo9iIj3ihwyRb/EF82M/pfXCeFHoFaF7smE6uqA4Z9imaVY6qPuAIU66NO/16nIvrjnTwuAcPSzHwSnRT6HxDfXsnatl7KLHa+80J5Ffp0Oin0mXX/YivaJH5+QXn8+X2xDINJgmgT9xZPod2h3/OI0qbqEaItX7tWmkecGmrT+QCwsYM6jt+vyVuj4ovrpNAjkOh/JlNIIYUUUkghhf4R+gURMq7xGPtBIwAAAABJRU5ErkJggg==" alt="Cash App QR Code" />
+    <br>
+    <a href="https://cash.app/$V3tpi3l" target="_blank">Open Cash App</a>
   </div>
-  <div id="result" class="muted"></div>
-  <hr style="border-color:#1b1b1b;margin:18px 0">
-  <div class="muted">
-    After you complete the P2P order and USDT lands in our Binance wallet, your Hydra balance is credited.
-    <br>Current flow: <span class="ok">Manual confirm</span> (we’re keeping it simple and robust first). We can add auto-reconcile next.
-  </div>
-</div>
-
-<script src="config.js"></script>
-<script src="wallet.js"></script>
-<script>
-const preset=[10,20,50,100,150,200,300,500,1000];
-const chipsWrap=document.getElementById('chips');
-let selected=null;
-preset.forEach(v=>{
-  const b=document.createElement('button');
-  b.className='chip'; b.textContent='$'+v;
-  b.onclick=()=>{selected=v;[...chipsWrap.children].forEach(c=>c.classList.remove('active'));b.classList.add('active');};
-  chipsWrap.appendChild(b);
-});
-document.getElementById('startBtn').onclick=async ()=>{
-  let amt=selected||parseFloat(document.getElementById('custom').value||'0');
-  if(!amt||amt<5){alert('Enter at least $5');return;}
-  const res=await createCashAppIntent(amt);
-  if(!res || !res.id){alert('Could not create deposit intent');return;}
-  const p2pUrl = `https://p2p.binance.com/en/trade/buy/USDT?fiat=USD&payment=CashApp&amount=${encodeURIComponent(amt)}`;
-  const box=document.getElementById('result');
-  box.innerHTML = `
-    <div>Intent <b>#${res.id}</b> created for <b>$${amt}</b>.</div>
-    <div style="margin-top:10px"><a href="${p2pUrl}" target="_blank">Open Binance P2P (USDT / USD / Cash App) for $${amt}</a></div>
-    <div class="muted" style="margin-top:8px">Complete the trade → USDT arrives → we credit you. You can keep this tab open; click “Check Status” after payment.</div>
-    <div style="margin-top:12px">
-      <button id="chk">Check Status</button>
-      <span id="st" class="warn"> waiting…</span>
-    </div>
-  `;
-  document.getElementById('chk').onclick=async ()=>{
-    const st=await getIntentStatus(res.id);
-    document.getElementById('st').textContent = st && st.status ? (' '+st.status) : ' unknown';
-  };
-};
-</script>
 </body>
 </html>
