@@ -1,203 +1,542 @@
-
-<!DOCTYPE html><html><head><meta charset="UTF-8"> <meta name="description" content="Hydra Casino - Modern Online Gaming Platform" /><!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hydra Wallet</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #eee;
-      font-family: "Orbitron", Arial, sans-serif;
-      text-align: center;
-      overflow: hidden;
-    }
-    canvas#matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    header {
-      font-size: 2.5rem;
-      color: #0ff;
-      text-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
-      margin: 1.5rem 0;
-      letter-spacing: 2px;
-    }
-    button, input, select {
-      margin: .7rem;
-      padding: .8rem 1.2rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: #111;
-      color: #0ff;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 10px #0ff, inset 0 0 5px #0ff;
-      transition: .2s;
-    }
-    button:hover, input:focus, select:focus {
-      box-shadow: 0 0 20px #0ff, inset 0 0 10px #0ff;
-      transform: scale(1.05);
-    }
-    pre {
-      background: #111;
-      color: #0f0;
-      padding: 1.2rem;
-      border-radius: 10px;
-      text-align: left;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 15px #0ff;
-      overflow-x: auto;
-    }
-    #p2p-form {
-      background: rgba(0,20,40,.8);
-      padding: 1.5rem;
-      border-radius: 12px;
-      border: 2px solid #0ff;
-      box-shadow: 0 0 20px #0ff;
-      display: inline-block;
-      margin-top: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix Platform</title>
+    <style>
+        :root {
+            --bg-primary: #0D0D0F;
+            --bg-secondary: #1A1C20;
+            --bg-tertiary: #25282E;
+            --accent-primary: #00F0B5;
+            --accent-secondary: #00A27A;
+            --text-primary: #E0E0E0;
+            --text-secondary: #8A8F98;
+            --border-color: #343841;
+            --font-family-main: 'Roboto Mono', 'Consolas', 'Courier New', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font-family-main);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .platform-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-header .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .sidebar-nav li a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 18px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-nav li a:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav li a.active {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+        
+        .sidebar-nav li a.active svg {
+            stroke: var(--bg-primary);
+        }
+
+        .sidebar-nav svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-secondary);
+            transition: stroke 0.2s;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background-color: var(--bg-secondary);
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            font-size: 2.25rem;
+            margin-bottom: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-header {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+        }
+        
+        .grid-container {
+            display: grid;
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .game-card {
+            background-color: #111214;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .game-card h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .game-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .winners-list .winner-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .winners-list .winner-item:last-child {
+            border-bottom: none;
+        }
+
+        /* --- Form Elements --- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: var(--font-family-main);
+            font-size: 1rem;
+        }
+        
+        select {
+            appearance: none;
+            padding-right: 40px;
+        }
+        
+        .input-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+        
+        .swap-icon {
+            text-align: center;
+            margin: -10px 0;
+            cursor: pointer;
+        }
+        
+        .swap-icon svg {
+             width: 24px;
+             height: 24px;
+             stroke: var(--accent-primary);
+             background: var(--bg-tertiary);
+             border-radius: 50%;
+             padding: 4px;
+             border: 1px solid var(--border-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: var(--font-family-main);
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-secondary);
+        }
+        
+        .agent-monitor {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            height: 200px;
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        
+        .agent-monitor .log-entry {
+            white-space: pre-wrap;
+        }
+
+        .exchange-rate {
+            text-align: center;
+            margin-top: 16px;
+            color: var(--text-secondary);
+        }
+        
+    </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
+    <div class="platform-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                <span>PHOENIX Ø</span>
+            </div>
+            <div class="sidebar-nav">
+                <ul>
+                    <li><a href="#" data-page="dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a></li>
+                    <li><a href="#" class="active" data-page="hydra"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg><span>Hydra Platform</span></a></li>
+                    <li><a href="#" data-page="chimera"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span>Chimera Ops</span></a></li>
+                    <li><a href="#" data-page="quantum"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg><span>Quantum Bridge</span></a></li>
+                    <li><a href="#" data-page="ledger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span>Ledger</span></a></li>
+                    <li><a href="#" data-page="sentinel"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg><span>Sentinel AI</span></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-footer">
+                <p id="sys-location">GQEBERHA, ZA</p>
+                <p id="sys-time"></p>
+                <p>SYS_STATUS: OPERATIONAL</p>
+                <p>NODE_ID: ...d3b9d3d97fca</p>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hydra Platform Page -->
+            <div id="hydra-page" class="page active">
+                <h1 class="page-header">UNLEASH THE FUN</h1>
+                <p style="color:var(--text-secondary); margin-top: -24px; margin-bottom: 32px;">Play, Experience the Best in Online Gaming Wins</p>
+                
+                <h2 class="section-header">Game Platforms</h2>
+                <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Vegas-X" alt="Vegas-X"></div>
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Riversweeps" alt="Riversweeps"></div>
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Skillmine" alt="Skillmine"></div>
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Ice8" alt="Ice8"></div>
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Juwa" alt="Juwa"></div>
+                    <div class="game-card"><img src="https://placehold.co/150x80/111214/8A8F98?text=Game Vault" alt="Game Vault"></div>
+                </div>
 
-  <header>🌀 HYDRA WALLET</header>
+                <div class="grid-container" style="grid-template-columns: 2fr 1fr; margin-top: 40px;">
+                    <div>
+                        <h2 class="section-header">Hot Games</h2>
+                        <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div class="game-card">
+                                <img src="https://placehold.co/200x120/111214/E0E0E0?text=Game+Art" alt="Billy's Game">
+                                <h4>Billy's Game</h4>
+                                <p>Vegas-X</p>
+                            </div>
+                            <div class="game-card">
+                                <img src="https://placehold.co/200x120/111214/E0E0E0?text=Game+Art" alt="Rich Life">
+                                <h4>Rich Life</h4>
+                                <p>Riversweeps</p>
+                            </div>
+                            <div class="game-card">
+                                <img src="https://placehold.co/200x120/111214/E0E0E0?text=Game+Art" alt="Vegas7">
+                                <h4>Vegas7</h4>
+                                <p>Skillmine</p>
+                            </div>
+                             <div class="game-card">
+                                <img src="https://placehold.co/200x120/111214/E0E0E0?text=Game+Art" alt="God of Wealth">
+                                <h4>God of Wealth</h4>
+                                <p>Ice8</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2 class="section-header">Recent Winners</h2>
+                        <div class="winners-list">
+                            <div class="winner-item"><span>PlayerX</span> <span>$2,500</span></div>
+                            <div class="winner-item"><span>AceHigh</span> <span>$1,820</span></div>
+                            <div class="winner-item"><span>LadyLuck</span> <span>$950</span></div>
+                            <div class="winner-item"><span>JackpotJoe</span> <span>$5,100</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  <button onclick="refreshWallet()">💰 Refresh Balance</button><br>
-  <input id="depositAmount" type="number" placeholder="Deposit amount">
-  <button onclick="makeDeposit()">➕ Deposit</button><br>
-  <input id="withdrawAmount" type="number" placeholder="Withdraw amount">
-  <input id="withdrawAddress" type="text" placeholder="USDT Address">
-  <button onclick="makeWithdraw()">➖ Withdraw</button><br>
+            <!-- Chimera Ops Page -->
+            <div id="chimera-page" class="page">
+                <h1 class="page-header">Chimera Operations</h1>
+                 <div class="grid-container" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card">
+                        <h2 class="section-header">Fiat On-Ramp (Deposit)</h2>
+                        <div class="form-group">
+                            <input type="number" placeholder="$ 100.00">
+                        </div>
+                        <button class="btn btn-primary">Pay with CashApp</button>
+                    </div>
+                     <div class="card">
+                        <h2 class="section-header">Crypto Payout (Withdraw)</h2>
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <select>
+                                    <option>USDT (TRC20)</option>
+                                    <option>BTC</option>
+                                    <option>ETH</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" placeholder="$ 50.00">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="TRC20 Wallet Address">
+                        </div>
+                        <button class="btn btn-primary">Request Payout</button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 24px;">
+                     <h2 class="section-header">Chimera Agent Monitor</h2>
+                     <div class="agent-monitor" id="agent-monitor">
+                        <div class="log-entry">[<span class="log-time">07:38:02</span>] Chimera Agent connection established.</div>
+                     </div>
+                </div>
+            </div>
 
-  <h2>Balance:</h2>
-  <pre id="balance">Loading...</pre>
+            <!-- Quantum Bridge Page -->
+            <div id="quantum-page" class="page">
+                 <h1 class="page-header">Quantum Bridge (Exchange)</h1>
+                 <div class="card" style="max-width: 500px; margin: 0 auto;">
+                     <div class="form-group">
+                         <label>You Send</label>
+                         <div class="input-wrapper">
+                              <input type="number" value="100">
+                              <select style="position: absolute; right: 1px; top: 1px; height: calc(100% - 2px); width: 100px; border-left: 1px solid var(--border-color); background-color: var(--bg-tertiary);">
+                                  <option>USD</option>
+                                  <option>EUR</option>
+                                  <option>GBP</option>
+                              </select>
+                         </div>
+                     </div>
+                     <div class="swap-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                     </div>
+                      <div class="form-group">
+                         <label>You Get (est.)</label>
+                         <div class="input-wrapper">
+                              <input type="number" value="99.9723" readonly>
+                              <select style="position: absolute; right: 1px; top: 1px; height: calc(100% - 2px); width: 100px; border-left: 1px solid var(--border-color); background-color: var(--bg-tertiary);">
+                                  <option>USDT</option>
+                                  <option>BTC</option>
+                                  <option>ETH</option>
+                              </select>
+                         </div>
+                     </div>
+                     <p class="exchange-rate">1 USD ≈ 0.9997 USDT</p>
+                     <button class="btn btn-primary" style="margin-top: 24px;">Exchange Now</button>
+                 </div>
+            </div>
+            
+             <!-- Placeholder Pages -->
+            <div id="dashboard-page" class="page"><h1 class="page-header">Dashboard</h1></div>
+            <div id="ledger-page" class="page"><h1 class="page-header">Ledger</h1></div>
+            <div id="sentinel-page" class="page"><h1 class="page-header">Sentinel AI</h1></div>
 
-  <h2>Transactions:</h2>
-  <pre id="transactions">Loading...</pre>
+        </main>
+    </div>
 
-  <h2>Deposit via Binance P2P (CashApp)</h2>
-  <div id="p2p-form">
-    <input type="number" id="p2pAmount" placeholder="Deposit amount (USD)">
-    <br>
-    <input type="text" id="hydraUser" placeholder="Your Hydra Username">
-    <br><br>
-    <select id="asset">
-      <option value="USDT">USDT (TRC20)</option>
-      <option value="BTC">Bitcoin (BTC)</option>
-    </select>
-    <br><br>
-    <button onclick="showDepositInstructions()">💱 Get Deposit Address</button>
-    <div id="depositInstructions" style="margin-top:1rem;color:#0f0;"></div>
-    <div id="qrcode" style="margin-top:1rem;"></div>
-  </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            const pages = document.querySelectorAll('.main-content .page');
+            const agentMonitor = document.getElementById('agent-monitor');
+            const sysTime = document.getElementById('sys-time');
 
-  <script src="config.js"></script>
-  <script src="wallet.js"></script>
-  <script>
-    async function refreshWallet(){
-      const w = await getWallet();
-      document.getElementById("balance").textContent = JSON.stringify(w, null, 2);
-      const t = await getTransactions();
-      document.getElementById("transactions").textContent = JSON.stringify(t, null, 2);
-    }
+            // --- Page Navigation Logic ---
+            function switchPage(pageId) {
+                // Update pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const activePage = document.getElementById(pageId + '-page');
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
 
-    async function makeDeposit(){
-      const amt = parseFloat(document.getElementById("depositAmount").value);
-      if(!amt) return alert("Enter amount");
-      const r = await deposit(amt);
-      alert(JSON.stringify(r));
-      refreshWallet();
-    }
+                // Update nav links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
 
-    async function makeWithdraw(){
-      const amt = parseFloat(document.getElementById("withdrawAmount").value);
-      const addr = document.getElementById("withdrawAddress").value;
-      if(!amt || !addr) return alert("Enter amount + address");
-      const r = await withdraw(amt, addr);
-      alert(JSON.stringify(r));
-      refreshWallet();
-    }
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const pageId = this.dataset.page;
+                    switchPage(pageId);
+                });
+            });
 
-    function showDepositInstructions(){
-      const amt = parseFloat(document.getElementById("p2pAmount").value);
-      const hydraUser = document.getElementById("hydraUser").value.trim();
-      const asset = document.getElementById("asset").value;
+            // --- System Clock and Log Simulation ---
+            function updateTime() {
+                const now = new Date();
+                const options = { timeZone: 'Africa/Johannesburg', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const saTime = now.toLocaleString('en-GB', options).replace(/,/, '');
+                if (sysTime) {
+                    sysTime.textContent = saTime.replace(/\//g, '-');
+                }
+            }
 
-      if(!amt || !hydraUser){
-        alert("Enter deposit amount + Hydra username ❗");
-        return;
-      }
+            function addLogEntry(message) {
+                 if (agentMonitor) {
+                    const now = new Date();
+                    const timeString = now.toTimeString().split(' ')[0];
+                    const newLog = document.createElement('div');
+                    newLog.className = 'log-entry';
+                    newLog.innerHTML = `[<span class="log-time">${timeString}</span>] ${message}`;
+                    agentMonitor.appendChild(newLog);
+                    agentMonitor.scrollTop = agentMonitor.scrollHeight;
+                 }
+            }
+            
+            // --- Initial state ---
+            switchPage('hydra');
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // --- Mock activity for Chimera monitor ---
+            setInterval(() => {
+                const messages = [
+                    'Scanning for new deposits...',
+                    'Payout request #345A confirmed.',
+                    'Monitoring TRC20 network for confirmations...',
+                    'Agent health check: OK',
+                    'New proof of payment received for TX #89C3.'
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                addLogEntry(randomMessage);
+            }, 7000);
 
-      const wallets = {
-        "USDT": "TUxxxxxxYourTRC20Wallet",
-        "BTC": "bc1qxxxxxxYourBTCWallet"
-      };
+        });
+    </script>
 
-      document.getElementById("depositInstructions").innerHTML = `
-        ✅ Send <b>$${amt}</b> worth of <b>${asset}</b> via Binance P2P (CashApp).<br><br>
-        👉 Hydra ID: <span style="color:#0ff">${hydraUser}</span><br>
-        👉 Wallet: <span style="color:#0ff">${wallets[asset]}</span><br><br>
-        ⏳ After funds arrive, your Hydra account will be credited.
-      `;
-
-      document.getElementById("qrcode").innerHTML = "";
-      new QRCode(document.getElementById("qrcode"), wallets[asset]);
-    }
-
-    refreshWallet();
-
-    // Matrix effect
-    const c = document.getElementById("matrix"), ctx = c.getContext("2d");
-    c.height = window.innerHeight; c.width = window.innerWidth;
-    const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモヤユヨラリルレロワヰヱヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-    const font = 14, cols = c.width / font, drops = Array(cols).fill(1);
-    function draw(){
-      ctx.fillStyle = "rgba(0,0,0,.05)";
-      ctx.fillRect(0,0,c.width,c.height);
-      ctx.fillStyle = "#0f0"; ctx.font = font+"px monospace";
-      for(let i=0;i<drops.length;i++){
-        const text = letters[Math.floor(Math.random()*letters.length)];
-        ctx.fillText(text,i*font,drops[i]*font);
-        if(drops[i]*font>c.height&&Math.random()>0.975)drops[i]=0;
-        drops[i]++;
-      }
-    }
-    setInterval(draw,33);
-  </script>
 </body>
-</html><title>Hydra Login</title>
-<style>
-body{background:#000;color:#eee;font-family:Arial;text-align:center;padding:2rem}
-header{font-size:2rem;color:#0ff;text-shadow:0 0 10px #0ff;margin-bottom:1.5rem}
-input,button{padding:.8rem;margin:.5rem;border-radius:6px;border:none}
-input{background:#111;color:#eee;border:2px solid #0ff}
-button{background:#0ff;color:#000;font-weight:bold;cursor:pointer}
-button:hover{background:#4caf50;color:#fff}
-</style></head><body>
-<header>🌀 HYDRA LOGIN</header>
-<form id="loginForm"><input id="username" type="text" placeholder="Username" required>
-<input id="password" type="password" placeholder="Password" required>
-<button type="submit">Login</button></form>
-<a href="register.html">Need an account? Register</a>
-<script src="config.js"></script><script src="wallet.js"></script>
-<script>
-document.getElementById("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const u=document.getElementById("username").value;
- const p=document.getElementById("password").value;
- const r=await login(u,p);
- if(r.token){alert("✅ Logged in!");window.location.href="dashboard.html";}
- else{alert("❌ "+(r.error||"Login failed"));}
-});
-</script></body></html>
-<div style="position:fixed;bottom:16px;left:16px"><a href="cashapp.html" style="color:#00e5ff">Deposit via Cash App (P2P)</a></div>
+</html>
