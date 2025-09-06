@@ -3,214 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hydra Admin Dashboard</title>
+  <title>PayFast Payment</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0a0f1f, #0d152b);
       color: #eee;
       display: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background: #111a33;
-      min-height: 100vh;
-      padding: 1.5rem 1rem;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-    }
-    .sidebar h2 {
-      color: #0ff;
-      text-shadow: 0 0 8px #0ff;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .sidebar a {
-      display: block;
-      padding: 0.8rem 1rem;
-      margin: 0.5rem 0;
-      color: #eee;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: 0.2s;
-    }
-    .sidebar a:hover {
-      background: #0ff3;
-      color: #0ff;
-    }
-    .main {
-      flex: 1;
-      padding: 2rem;
-    }
-    .main h1 {
-      font-size: 1.8rem;
-      color: #0ff;
-      text-shadow: 0 0 8px #0ff;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    .card {
-      background: #111a33;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,255,255,0.1);
-    }
-    .card h2 {
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       margin: 0;
-      font-size: 1.2rem;
-      color: #0ff;
     }
-    .card p {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      color: #ccc;
-    }
-    table {
-      width: 100%;
-      margin-top: 2rem;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 0.8rem;
-      border-bottom: 1px solid #222;
-      text-align: left;
-    }
-    th {
-      color: #0ff;
-    }
-    tr:hover {
-      background: rgba(0,255,255,0.05);
-    }
-    .status {
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    .status.active { background: #0f07; color: #0f0; }
-    .status.suspended { background: #f007; color: #f33; }
-    .status.pending { background: #ff07; color: #ff0; }
-    .payfast-form {
-      margin-top: 3rem;
-      padding: 2rem;
+    .payment-box {
       background: #111a33;
+      padding: 2rem 2.5rem;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,255,255,0.15);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
     }
-    .payfast-form h2 {
+    h1 {
       color: #0ff;
       margin-bottom: 1rem;
     }
-    .payfast-form table {
+    label {
+      display: inline-block;
+      margin: 0.5rem 0;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      margin-top: 0.3rem;
+    }
+    table {
+      width: 100%;
       margin: 1rem 0;
+    }
+    td {
+      padding: 0.3rem;
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>🌀 Hydra Admin</h2>
-    <a href="#">Dashboard</a>
-    <a href="#">User Management</a>
-    <a href="#">Transactions</a>
-    <a href="#">Reports</a>
-    <a href="#">Settings</a>
-    <a href="/admin-login.html">Logout</a>
-  </div>
+  <div class="payment-box">
+    <h1>💳 PayFast Checkout</h1>
 
-  <!-- Main Content -->
-  <div class="main">
-    <h1>Welcome Back, Admin</h1>
+    <form onsubmit="return actionPayFastJavascript(this);" 
+          name="PayFastPayNowForm" 
+          action="https://payment.payfast.io/eng/process" 
+          method="post">
+          
+      <input type="hidden" name="cmd" value="_paynow" required>
+      <input type="hidden" name="receiver" value="31286507" required>
 
-    <div class="card-grid">
-      <div class="card">
-        <h2>Total Users</h2>
-        <p id="totalUsers">1,245</p>
-      </div>
-      <div class="card">
-        <h2>Total Balance</h2>
-        <p id="totalBalance">$98,430.00</p>
-      </div>
-      <div class="card">
-        <h2>Active Sessions</h2>
-        <p id="activeSessions">87</p>
-      </div>
-      <div class="card">
-        <h2>System Status</h2>
-        <p style="color:#0f0;">🟢 Online</p>
-      </div>
-    </div>
-
-    <h2 style="margin-top:2rem;">Recent User Accounts</h2>
-    <table>
-      <thead>
+      <table>
         <tr>
-          <th>User ID</th>
-          <th>Email</th>
-          <th>Balance</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="userTable">
-        <tr>
-          <td>USR10293</td>
-          <td>john@example.com</td>
-          <td>$1,500.00</td>
-          <td><span class="status active">Active</span></td>
+          <td><label for="PayFastAmount">Amount:</label></td>
+          <td><input id="PayFastAmount" type="number" step=".01" name="amount" min="5.00" value="1999" required></td>
         </tr>
         <tr>
-          <td>USR39482</td>
-          <td>lisa@example.com</td>
-          <td>$230.00</td>
-          <td><span class="status pending">Pending</span></td>
+          <td><label for="custom_quantity">Quantity:</label></td>
+          <td><input id="custom_quantity" type="number" name="custom_quantity" value="1" required></td>
         </tr>
-        <tr>
-          <td>USR84729</td>
-          <td>mike@example.com</td>
-          <td>$3,200.00</td>
-          <td><span class="status suspended">Suspended</span></td>
-        </tr>
-      </tbody>
-    </table>
+      </table>
 
-    <!-- PayFast Payment Form -->
-    <div class="payfast-form">
-      <h2>💳 PayFast Payment</h2>
-      <form onsubmit="return actionPayFastJavascript(this);" name="PayFastPayNowForm" action="https://payment.payfast.io/eng/process" method="post">
-        <input type="hidden" name="cmd" value="_paynow" required>
-        <input type="hidden" name="receiver" value="31286507" required>
+      <input type="hidden" name="item_name" value="ve" required>
 
-        <table>
-          <tr>
-            <td><label for="PayFastAmount">Amount: </label></td>
-            <td><input id="PayFastAmount" type="number" step=".01" name="amount" min="5.00" placeholder="5.00" value="1999" required></td>
-          </tr>
-          <tr>
-            <td><label for="custom_quantity">Quantity: </label></td>
-            <td><input id="custom_quantity" type="number" name="custom_quantity" value="1" required></td>
-          </tr>
-        </table>
-
-        <input type="hidden" name="item_name" value="venue" required>
-        <input type="hidden" name="item_description" value="venue service">
-
-        <div style="text-align:center; margin-top:1rem;">
-          <input type="image" src="https://my.payfast.io/images/buttons/PayNow/Primary-Large-PayNow.png" alt="Pay Now" title="Pay Now with Payfast">
-        </div>
-      </form>
-    </div>
+      <div style="margin-top: 1rem;">
+        <input type="image" 
+               src="https://my.payfast.io/images/buttons/PayNow/Primary-Large-PayNow.png" 
+               alt="Pay Now" 
+               title="Pay Now with PayFast">
+      </div>
+    </form>
   </div>
 
   <script>
-    // Example: Replace with real API fetch later
-    document.addEventListener("DOMContentLoaded", () => {
-      console.log("Hydra Admin Dashboard Loaded ✅");
-    });
-
-    // Custom PayFast Functions
     function customQuantitiesPayFast(formReference) {
       formReference['amount'].value = formReference['amount'].value * formReference['custom_quantity'].value;
       return true;
