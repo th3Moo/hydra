@@ -93,9 +93,24 @@
     .status.active { background: #0f07; color: #0f0; }
     .status.suspended { background: #f007; color: #f33; }
     .status.pending { background: #ff07; color: #ff0; }
+    .payfast-form {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: #111a33;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,255,255,0.15);
+    }
+    .payfast-form h2 {
+      color: #0ff;
+      margin-bottom: 1rem;
+    }
+    .payfast-form table {
+      margin: 1rem 0;
+    }
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
   <div class="sidebar">
     <h2>🌀 Hydra Admin</h2>
     <a href="#">Dashboard</a>
@@ -106,6 +121,7 @@
     <a href="/admin-login.html">Logout</a>
   </div>
 
+  <!-- Main Content -->
   <div class="main">
     <h1>Welcome Back, Admin</h1>
 
@@ -159,6 +175,33 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- PayFast Payment Form -->
+    <div class="payfast-form">
+      <h2>💳 PayFast Payment</h2>
+      <form onsubmit="return actionPayFastJavascript(this);" name="PayFastPayNowForm" action="https://payment.payfast.io/eng/process" method="post">
+        <input type="hidden" name="cmd" value="_paynow" required>
+        <input type="hidden" name="receiver" value="31286507" required>
+
+        <table>
+          <tr>
+            <td><label for="PayFastAmount">Amount: </label></td>
+            <td><input id="PayFastAmount" type="number" step=".01" name="amount" min="5.00" placeholder="5.00" value="1999" required></td>
+          </tr>
+          <tr>
+            <td><label for="custom_quantity">Quantity: </label></td>
+            <td><input id="custom_quantity" type="number" name="custom_quantity" value="1" required></td>
+          </tr>
+        </table>
+
+        <input type="hidden" name="item_name" value="venue" required>
+        <input type="hidden" name="item_description" value="venue service">
+
+        <div style="text-align:center; margin-top:1rem;">
+          <input type="image" src="https://my.payfast.io/images/buttons/PayNow/Primary-Large-PayNow.png" alt="Pay Now" title="Pay Now with Payfast">
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -166,6 +209,25 @@
     document.addEventListener("DOMContentLoaded", () => {
       console.log("Hydra Admin Dashboard Loaded ✅");
     });
+
+    // Custom PayFast Functions
+    function customQuantitiesPayFast(formReference) {
+      formReference['amount'].value = formReference['amount'].value * formReference['custom_quantity'].value;
+      return true;
+    }
+
+    function actionPayFastJavascript(formReference) {
+      let shippingValidOrOff = typeof shippingValid !== 'undefined' ? shippingValid : true;
+      let customValid = shippingValidOrOff ? customQuantitiesPayFast(formReference) : false;
+
+      if (typeof shippingValid !== 'undefined' && !shippingValid) {
+        return false;
+      }
+      if (typeof customValid !== 'undefined' && !customValid) {
+        return false;
+      }
+      return true;
+    }
   </script>
 </body>
 </html>
